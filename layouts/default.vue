@@ -40,7 +40,6 @@
     </v-app-bar>
 
     <v-content>
-
       <v-container>
 
         <v-navigation-drawer absolute permanent dark>
@@ -60,6 +59,7 @@
 
                   <!-- navigation level 2 -->
                   <template v-for="naviChild in navi.children">
+
 
                         <!-- if there are children(it's a sub folder) -->
                         <v-list-group
@@ -180,13 +180,21 @@ export default {
                                       "id": "1.2.1.1",
                                       "title": "try",
                                       "route": "/meser/scripts/linux/try/sub2.md",
+                                  },{
+                                      "id": "1.2.1.2",
+                                      "title": "certificates",
+                                      "route": "/meser/scripts/linux/certificates.md",
+                                  },{
+                                      "id": "1.2.1.3",
+                                      "title": "ntpdate",
+                                      "route": "/meser/scripts/linux/ntpdate.md",
                                   }
                               ]
                             },
                             {
                               "id": "1.2.2",
-                              "title": "certificate",
-                              "route": "/meser/scripts/linux/certificate.md",
+                              "title": "script",
+                              "route": "/meser/scripts/linux/script.md",
                             }
                           ],
                       }
