@@ -1,7 +1,5 @@
 <template>
   <v-app>
-      <!--clipped-->
-      <!---->
     <v-app-bar
             app
             tile
@@ -17,11 +15,13 @@
                 optional
                 background-color="accent"
                 v-model="selectedTab">
-          <v-tab v-for="tab in tabs"
-                 :key="tab.id">
+                  <v-tab v-for="tab in navigation"
+                         :key="tab.id"
+                  >
             {{tab.name}}
           </v-tab>
         </v-tabs>
+
       </v-toolbar-items>
 
       <div class="flex-grow-1"></div>
@@ -41,25 +41,31 @@
 
     <v-content>
       <v-container>
-
-        <v-navigation-drawer absolute permanent dark>
+        <v-navigation-drawer absolute permanent dark
+            v-if="selectedTab">
           <v-list>
               <!-- navigation level 1 -->
+
+<!--              v-if="navigation[selectedTab.index].children && navigation[selectedTab.index].children > 0"-->
               <v-list-group
-                      v-for="navi in navigation[0].value.children"
-                      :key="'adi1 ' + navi.id"
+                      v-if="navigation[selectedTab.index] &&
+                      navigation[selectedTab.index].children.length &&
+                      navigation[selectedTab.index].children[0].children &&
+                      navigation[selectedTab.index].children[0].children.length > 0"
+                      v-for="navi in navigation[selectedTab.index].children"
+                      :key="navi.id"
                       no-action
               >
                   <template v-slot:activator>
-                      <v-list-item>
-                          <v-list-item-title v-text="navi.title">
+                      <v-list-item @click="setRoute(navi.route)">
+                          <v-list-item-title v-text="'1'+navi.title">
                           </v-list-item-title>
                       </v-list-item>
                   </template>
 
+
                   <!-- navigation level 2 -->
                   <template v-for="naviChild in navi.children">
-
 
                         <!-- if there are children(it's a sub folder) -->
                         <v-list-group
@@ -68,8 +74,8 @@
                                 sub-group
                         >
                             <template v-slot:activator>
-                                  <v-list-item-content>
-                                      <v-list-item-title v-text="naviChild.title">
+                                  <v-list-item-content  @click="setRoute(naviChild.route)">
+                                      <v-list-item-title v-text="'2'+naviChild.title">
                                       </v-list-item-title>
                                   </v-list-item-content>
                             </template>
@@ -80,8 +86,8 @@
                                          link
                             >
 
-                                <v-list-item-content>
-                                    <v-list-item-title v-text="naviChildChild.title">
+                                <v-list-item-content @click="setRoute(naviChildChild.route)">
+                                    <v-list-item-title v-text="'3'+naviChildChild.title">
                                     </v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
@@ -89,19 +95,29 @@
 
                       <!-- this is not a sub folder -->
                       <v-list-item v-if="!naviChild.children" link>
-                          <v-list-item-content>
-                          <v-list-item-title v-text="naviChild.title">
+                          <v-list-item-content @click="setRoute(naviChild.route)">
+                          <v-list-item-title v-text="'4'+naviChild.title">
                           </v-list-item-title>
                           </v-list-item-content>
                       </v-list-item>
 
                   </template>
               </v-list-group>
+
+              <!-- this is not a sub folder -->
+              <v-list-item v-if="navigation[selectedTab.index] &&
+                           navigation[selectedTab.index].children.length &&
+                           !navigation[selectedTab.index].children[0].children"
+                  link>
+                  <v-list-item-content @click="setRoute(navigation[selectedTab.index].children[0].route)">
+                      <v-list-item-title v-text="'1'+navigation[selectedTab.index].children[0].title">
+                      </v-list-item-title>
+                  </v-list-item-content>
+              </v-list-item>
+
           </v-list>
         </v-navigation-drawer>
-
         <nuxt />
-
       </v-container>
     </v-content>
 
@@ -109,101 +125,42 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      group: undefined,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
+    import { mapState , mapMutations} from 'vuex';
+    export default {
+        computed: {
+            ...mapState([
+              'navigation',
+              'selectedTab',
+              'selectedRoute',
+            ]),
+            selectedTab: {
+                get() {
+                    return this.$store.state.selectedTab;
+                },
+                set(index) {
+                  this.setSelectedTab( {index: index, value: this.navigation[index].id});
+
+                  if (this.navigation[index].route) {
+                      this.setRoute(this.navigation[index].route);
+                  }
+                }
+            }
         },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        }
-      ],
-      title: 'Hatraa Docs',
-      tabs: [
-        {
-          id: 'meser',
-          name: 'Meser Leumi'
+        methods: {
+            ...mapMutations(['setSelectedTab',
+            'setSelectedRoute']),
+            setRoute : function(value) {
+
+                if (value) {
+                    this.$router.push(value);
+                    this.setSelectedRoute(value);
+                }
+            }
         },
-        {
-          id: 'horizon',
-          name: 'Horzion'
+        data () {
+            return {
+              title: 'Hatraa Docs',
+            }
         },
-        {
-          id: 'engineer',
-          name: 'Engineer'
-        },
-      ],
-      navigation: [
-        {
-          "key" : "meser",
-          "value" : {
-            "id": "1",
-            "title": "main",
-            "route": "/meser/index.md",
-            "children":
-                    [
-                      {
-                        "id": "1.1",
-                        "title": "installs",
-                        "route": "/meser/installs/install.md",
-                        "children": [
-                          {
-                            "id": "1.1.1",
-                            "title": "fedora",
-                            "route": "/meser/installs/fedora.md",
-                          },
-                          {
-                            "id": "1.1.2",
-                            "title": "chrome",
-                            "route": "/meser/installs/chrome.md",
-                          }
-                        ]
-                      },
-                      {
-                        "id": "1.2",
-                        "title": "scripts",
-                        "route": "/meser/scripts/script.md",
-                        "children": [
-                            {
-                              "id": "1.2.1",
-                              "title": "linux",
-                              "route": "/meser/scripts/linux/ntpdate.md",
-                              "children" : [
-                                  {
-                                      "id": "1.2.1.1",
-                                      "title": "try",
-                                      "route": "/meser/scripts/linux/try/sub2.md",
-                                  },{
-                                      "id": "1.2.1.2",
-                                      "title": "certificates",
-                                      "route": "/meser/scripts/linux/certificates.md",
-                                  },{
-                                      "id": "1.2.1.3",
-                                      "title": "ntpdate",
-                                      "route": "/meser/scripts/linux/ntpdate.md",
-                                  }
-                              ]
-                            },
-                            {
-                              "id": "1.2.2",
-                              "title": "script",
-                              "route": "/meser/scripts/linux/script.md",
-                            }
-                          ],
-                      }
-                    ]
-              },
-          }
-      ],
-        selectedTab: undefined,
     }
-  }
-}
 </script>
