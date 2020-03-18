@@ -37,14 +37,15 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-      '~/plugins/vuex'
+    {src : '~/plugins/vuex.js'},
+    {src : '~/plugins/markdown.js', mode: 'client'},
   ],
   /*
   ** Nuxt.js dev-modules
   */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
+    // '@nuxtjs/eslint-module',
     '@nuxtjs/vuetify',
   ],
   /*
@@ -57,7 +58,7 @@ module.exports = {
   ** https://github.com/nuxt-community/vuetify-module
   */
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    // customVariables: ['~/assets/variables.scss'],
     theme: {
       dark: false,
       themes: {

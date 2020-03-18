@@ -1,9 +1,10 @@
 <template>
   <v-app>
     <v-app-bar
+            absolute
             app
             tile
-            clipped
+            clipped-left
             color="accent"
     >
       <v-toolbar-title
@@ -14,12 +15,13 @@
         <v-tabs height="100%"
                 optional
                 background-color="accent"
-                v-model="selectedTab">
+                v-model="selectedTab"
+                >
                   <v-tab v-for="tab in navigation"
                          :key="tab.id"
                   >
-            {{tab.name}}
-          </v-tab>
+                    {{tab.name}}
+                  </v-tab>
         </v-tabs>
 
       </v-toolbar-items>
@@ -41,18 +43,27 @@
 
     <v-content>
       <v-container>
-        <v-navigation-drawer absolute permanent dark
-            v-if="selectedTab">
-          <v-list>
-              <!-- navigation level 1 -->
 
-<!--              v-if="navigation[selectedTab.index].children && navigation[selectedTab.index].children > 0"-->
+<!--          clipped-->
+<!--          -->
+
+        <v-navigation-drawer
+                app
+                permanent
+                clipped
+                dark
+                v-if="selectedTab != undefined">
+          <v-list flat>
+              <v-list-item-group
+                      active-class="accent--text"
+              >
+
               <v-list-group
-                      v-if="navigation[selectedTab.index] &&
-                      navigation[selectedTab.index].children.length &&
-                      navigation[selectedTab.index].children[0].children &&
-                      navigation[selectedTab.index].children[0].children.length > 0"
-                      v-for="navi in navigation[selectedTab.index].children"
+                      v-if="navigation[selectedTab] &&
+                      navigation[selectedTab].children.length &&
+                      navigation[selectedTab].children[0].children &&
+                      navigation[selectedTab].children[0].children.length > 0"
+                      v-for="navi in navigation[selectedTab].children"
                       :key="navi.id"
                       no-action
               >
@@ -83,8 +94,7 @@
                             <!-- create the children in the sub folder -->
                             <v-list-item v-for="naviChildChild in naviChild.children"
                                          :key="naviChildChild.id"
-                                         link
-                            >
+                                         link>
 
                                 <v-list-item-content @click="setRoute(naviChildChild.route)">
                                     <v-list-item-title v-text="'3'+naviChildChild.title">
@@ -103,21 +113,34 @@
 
                   </template>
               </v-list-group>
-
+              </v-list-item-group>
               <!-- this is not a sub folder -->
-              <v-list-item v-if="navigation[selectedTab.index] &&
-                           navigation[selectedTab.index].children.length &&
-                           !navigation[selectedTab.index].children[0].children"
-                  link>
-                  <v-list-item-content @click="setRoute(navigation[selectedTab.index].children[0].route)">
-                      <v-list-item-title v-text="'1'+navigation[selectedTab.index].children[0].title">
-                      </v-list-item-title>
-                  </v-list-item-content>
-              </v-list-item>
+              <v-list-item-group
+                            active-class="accent--text">
+                  <v-list-item v-if="navigation[selectedTab] &&
+                           navigation[selectedTab].children.length &&
+                           !navigation[selectedTab].children[0].children"
+                               link>
+                      <v-list-item-content @click="setRoute(navigation[selectedTab].children[0].route)">
+                          <v-list-item-title v-text="'1'+navigation[selectedTab].children[0].title">
+                          </v-list-item-title>
+                      </v-list-item-content>
+                  </v-list-item>
+              </v-list-item-group>
 
           </v-list>
-        </v-navigation-drawer>
-        <nuxt />
+          </v-navigation-drawer>
+          <HeaderPanel v-if="selectedRoute != '/'"/>
+
+          <no-ssr>
+              <vue-editor
+                      v-if="editMode"
+                      previewStyle="vertical"
+                      height="300px"
+                      mode="markdown"
+              />
+          </no-ssr>
+          <nuxt />
       </v-container>
     </v-content>
 
@@ -125,23 +148,34 @@
 </template>
 
 <script>
+
     import { mapState , mapMutations} from 'vuex';
+    import HeaderPanel from "../components/HeaderPanel";
     export default {
+        components: {HeaderPanel},
         computed: {
             ...mapState([
               'navigation',
               'selectedTab',
               'selectedRoute',
+              'hierarchy',
+                'editMode',
             ]),
             selectedTab: {
                 get() {
                     return this.$store.state.selectedTab;
                 },
                 set(index) {
-                  this.setSelectedTab( {index: index, value: this.navigation[index].id});
 
-                  if (this.navigation[index].route) {
+                 // this.setSelectedTab( {index: index, value: this.navigation[index].id});
+                  this.setSelectedTab(index);
+
+                  if (this.navigation[index] && this.navigation[index].route) {
+
                       this.setRoute(this.navigation[index].route);
+                  }
+                  else {
+                      this.setRoute('/');
                   }
                 }
             }
@@ -152,6 +186,26 @@
             setRoute : function(value) {
 
                 if (value) {
+                   var splitResults = value.split("/").slice(1);
+
+                   this.$store.state.hierarchy =splitResults.map(
+                        function(x, i) {
+                            var href= '';
+                            // if (i==splitResults.length-1) {
+                            //     href = value;
+                            // }
+                            // else {
+                            //     for(var j=0; j<i;j++) {
+                            //         href+=splitResults[j];
+                            //     }
+                            // }
+                            return {
+                                text: x,
+                                disabled: false,
+                                href: href
+                            }
+                        });
+
                     this.$router.push(value);
                     this.setSelectedRoute(value);
                 }

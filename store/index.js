@@ -1,96 +1,3 @@
-//import Vuex from 'vuex';
-
-//     getters: {
-// new Vuex.Store({
-//
-//     state: {
-//         navigation: [
-//             {
-//                 "key" : "meser",
-//                 "value" : {
-//                     "id": "1",
-//                     "title": "main",
-//                     "route": "/meser/index",
-//                     "children":
-//                         [
-//                             {
-//                                 "id": "1.1",
-//                                 "title": "installs",
-//                                 "route": "/meser/installs/install",
-//                                 "children": [
-//                                     {
-//                                         "id": "1.1.1",
-//                                         "title": "fedora",
-//                                         "route": "/meser/installs/fedora",
-//                                     },
-//                                     {
-//                                         "id": "1.1.2",
-//                                         "title": "chrome",
-//                                         "route": "/meser/installs/chrome",
-//                                     }
-//                                 ]
-//                             },
-//                             {
-//                                 "id": "1.2",
-//                                 "title": "scripts",
-//                                 "route": "/meser/scripts/script",
-//                                 "children": [
-//                                     {
-//                                         "id": "1.2.1",
-//                                         "title": "linux",
-//                                         "route": "/meser/scripts/linux/ntpdate",
-//                                         "children" : [
-//                                             {
-//                                                 "id": "1.2.1.1",
-//                                                 "title": "try",
-//                                                 "route": "/meser/scripts/linux/try/sub2",
-//                                             },{
-//                                                 "id": "1.2.1.2",
-//                                                 "title": "certificates",
-//                                                 "route": "/meser/scripts/linux/certificates",
-//                                             },{
-//                                                 "id": "1.2.1.3",
-//                                                 "title": "ntpdate",
-//                                                 "route": "/meser/scripts/linux/ntpdate",
-//                                             }
-//                                         ]
-//                                     },
-//                                     {
-//                                         "id": "1.2.2",
-//                                         "title": "script",
-//                                         "route": "/meser/scripts/linux/script",
-//                                     }
-//                                 ],
-//                             }
-//                         ]
-//                 },
-//             }
-//         ],
-//         outboxMessages: [],
-//         trashboxMessages: [],
-//         selectedMessage: undefined,
-//         selectedOption: undefined,
-//         openDialog: false,
-//     },
-//     },
-//     actions: {
-//         toggleFavourite({ commit }, id) {
-//             commit('toggleFavourite', id);
-//         },
-//         toggleNewMail({ commit }, value) {
-//             commit('toggleNewMail', value);
-//         },
-//     },
-//     mutations: {
-//         toggleFavourite(state, id) {
-//             state.inboxMessages[id].favourite = !state.inboxMessages[id].favourite;
-//         },
-//         toggleNewMail(state, value) {
-//             state.openDialog = value;
-//         },
-//     },
-// });
-
 import Vue from "vue";
 import Vuex from "vuex";
 
@@ -109,7 +16,7 @@ Vue.use(Vuex)
                             {
                                 id: "1.1",
                                 title: "installs",
-                                route: "/meser/installs/install",
+                                route: "/meser/installs/index",
                                 children: [
                                     {
                                         id: "1.1.1",
@@ -188,7 +95,9 @@ Vue.use(Vuex)
                     route: '/engineer/automation'
                 }]
             }
-        ]
+        ],
+    hierarchy :  [],
+    editMode: false,
 })
 
  const mutation = () => ({
@@ -198,6 +107,9 @@ Vue.use(Vuex)
      setSelectedRoute(state, value) {
         state.selectedRoute = value;
     },
+     toggleEditMode(state) {
+        state.editMode = !state.editMode;
+     },
 })
 
 const store = () => {
