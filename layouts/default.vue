@@ -130,16 +130,10 @@
 
           </v-list>
           </v-navigation-drawer>
-          <HeaderPanel v-if="selectedRoute != '/'"/>
-
-          <no-ssr>
-              <vue-editor
-                      v-if="editMode"
-                      previewStyle="vertical"
-                      height="300px"
-                      mode="markdown"
-              />
-          </no-ssr>
+          <div v-if="selectedRoute != '/'">
+              <HeaderPanel />
+              <PageContent />
+          </div>
           <nuxt />
       </v-container>
     </v-content>
@@ -151,15 +145,15 @@
 
     import { mapState , mapMutations} from 'vuex';
     import HeaderPanel from "../components/HeaderPanel";
+    import PageContent from "../components/PageContent";
     export default {
-        components: {HeaderPanel},
+        components: {PageContent, HeaderPanel},
         computed: {
             ...mapState([
               'navigation',
               'selectedTab',
               'selectedRoute',
               'hierarchy',
-                'editMode',
             ]),
             selectedTab: {
                 get() {

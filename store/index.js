@@ -98,6 +98,7 @@ Vue.use(Vuex)
         ],
     hierarchy :  [],
     editMode: false,
+    content: '',
 })
 
  const mutation = () => ({
@@ -110,6 +111,9 @@ Vue.use(Vuex)
      toggleEditMode(state) {
         state.editMode = !state.editMode;
      },
+     setContent(state, value) {
+        state.content = value;
+     }
 })
 
 const store = () => {
