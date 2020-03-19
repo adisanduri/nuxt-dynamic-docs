@@ -24,6 +24,7 @@
     "express": "^4.16.4",
     "frontmatter-markdown-loader": "^2.3.0",
     "glob": "^7.1.5",
+    "helmet": "^3.21.3",
     "nuxt": "^2.12.0",
     "path": "^0.12.7",
     "simplemde": "^1.11.2",

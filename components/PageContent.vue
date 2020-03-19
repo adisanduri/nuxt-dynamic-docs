@@ -11,7 +11,8 @@
                         height="300px"
                         initialEditType="wysiwyg"
                 />
-                <v-btn @click="save()">save</v-btn>
+                <v-btn color="blue" @click="save()">save</v-btn>
+                <v-btn @click="cancel()">cancel</v-btn>
             </div>
             <div v-else v-html="content">
                 {{content}}
@@ -47,6 +48,9 @@
                 ]),
             save() {
                 this.setContent(this.$refs.tuiEditor.invoke('getHtml'));
+                this.toggleEditMode();
+            },
+            cancel() {
                 this.toggleEditMode();
             },
             async getTitle(){

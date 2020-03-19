@@ -154,6 +154,7 @@
               'selectedTab',
               'selectedRoute',
               'hierarchy',
+                'editMode'
             ]),
             selectedTab: {
                 get() {
@@ -176,7 +177,8 @@
         },
         methods: {
             ...mapMutations(['setSelectedTab',
-            'setSelectedRoute']),
+            'setSelectedRoute',
+            'toggleEditMode']),
             setRoute : function(value) {
 
                 if (value) {
@@ -202,6 +204,7 @@
 
                     this.$router.push(value);
                     this.setSelectedRoute(value);
+                    this.editMode ? this.toggleEditMode() : undefined;
                 }
             }
         },

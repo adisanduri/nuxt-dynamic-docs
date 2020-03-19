@@ -25,7 +25,6 @@
                 console.log(`~/content/${params.category}/${params.subCategory}/${params.subSlug}.md`)
                 let pageResult = await import(`~/content/${params.category}/${params.subCategory}/${params.subSlug}.md`);
                 setTimeout(()=> {
-                    debugger;
                     store.commit('setContent', pageResult.default.html);
                     },
                     0);

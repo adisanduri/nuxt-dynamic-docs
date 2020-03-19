@@ -98,7 +98,18 @@ module.exports = {
   },
   router: {
 
+  },
+  render: {
+    static: {
+      setHeaders(res) {
+        res.setHeader('X-Frame-Options', 'sameorigin')
+        res.setHeader('Access-Control-Allow-Origin', '*')
+        res.setHeader('Access-Control-Allow-Methods', 'GET')
+        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+      }
+    }
   }
+
 }
 
 function getDynamicPaths(urlFilepathTable) {

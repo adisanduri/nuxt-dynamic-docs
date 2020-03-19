@@ -1,5 +1,9 @@
 const express = require('express')
 const consola = require('consola')
+const helmet = require('helmet')
+const frameguard = require('frameguard')
+
+
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
 
@@ -23,6 +27,9 @@ async function start () {
 
   // Give nuxt middleware to express
   app.use(nuxt.render)
+
+  // Set X-offset to SAMEORIGIN - access to graphs in grafana
+  //app.use(helmet.frameguard({ action: 'SAMEORIGIN' }));
 
   // Listen the server
   app.listen(port, host)
