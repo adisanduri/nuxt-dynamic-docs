@@ -1,8 +1,8 @@
-const express = require('express')
-const consola = require('consola')
-const helmet = require('helmet')
-const frameguard = require('frameguard')
-
+const express = require('express');
+const consola = require('consola');
+const mongoose = require('mongoose');
+const graphqlHTTP = require('express-graphql');
+const schema = require('./schema');
 
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
@@ -15,7 +15,7 @@ async function start () {
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
 
-  const { host, port } = nuxt.options.server
+  let { host, port } = nuxt.options.server
 
   // Build only in dev mode
   if (config.dev) {
@@ -25,12 +25,15 @@ async function start () {
     await nuxt.ready()
   }
 
+  mongoose.connect('mongodb://localhost:27017/hatraa', {useNewUrlParser: true});
+  mongoose.connection.once('open', () => {
+    console.log('connected to database');
+  })
+
+  app.use('/graphiql', graphqlHTTP({ schema: schema, graphiql: true}));
   // Give nuxt middleware to express
   app.use(nuxt.render)
-
-  // Set X-offset to SAMEORIGIN - access to graphs in grafana
-  //app.use(helmet.frameguard({ action: 'SAMEORIGIN' }));
-
+port = 3002;
   // Listen the server
   app.listen(port, host)
   consola.ready({

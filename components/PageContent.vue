@@ -20,13 +20,24 @@
 
         </no-ssr>
 
+        <comments />
+<!--        <ClientOnly>-->
+<!--            <Vssue title="Vssue Demo" />-->
+<!--        </ClientOnly>-->
+
+
+
+
     </div>
 </template>
 
 <script>
+
     import {mapState, mapMutations} from "vuex";
+    import Comments from "./Comments";
 
     export default {
+        components: { Comments},
         computed: {
             ...mapState([
                 'selectedRoute',

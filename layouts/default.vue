@@ -1,9 +1,8 @@
 <template>
   <v-app>
     <v-app-bar
-            absolute
             app
-            tile
+            fixed
             clipped-left
             color="accent"
     >
@@ -37,7 +36,11 @@
                 label="Search"
                 prepend-inner-icon="mdi-magnify"
                 solo-inverted
-        />
+        >
+
+<!--            <vue-fuse :keys="keys" :list="bikes" :eventName="bikesChanged"></vue-fuse>-->
+        </v-text-field>
+
       </v-col>
     </v-app-bar>
 
@@ -135,7 +138,9 @@
               <PageContent />
           </div>
           <nuxt />
+
       </v-container>
+
     </v-content>
 
   </v-app>
@@ -146,6 +151,7 @@
     import { mapState , mapMutations} from 'vuex';
     import HeaderPanel from "../components/HeaderPanel";
     import PageContent from "../components/PageContent";
+
     export default {
         components: {PageContent, HeaderPanel},
         computed: {
@@ -208,9 +214,27 @@
                 }
             }
         },
+        async asyncData({ params, store}) {
+            try {
+
+                // TODO: insert content of files into vueFuse
+               //  let pageResult = await import(`~/content/*`);
+               //  debugger;
+               //  var x = pageResult;
+               // return {
+               //     pageResult: pageResult
+               // }
+
+            } catch (err) {
+                console.debug(err)
+                return false
+            }
+        },
         data () {
             return {
-              title: 'Hatraa Docs',
+                title: 'Hatraa Docs',
+                selectedPolicy: '*',
+                try1: undefined,
             }
         },
     }

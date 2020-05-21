@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-tooltip bottom v-for="action in actions">
+        <v-tooltip bottom key="action.id" v-for="action in actions">
             <template v-slot:activator="{ on }">
                 <v-btn icon
                        v-on="on"

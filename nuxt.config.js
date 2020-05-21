@@ -38,7 +38,10 @@ module.exports = {
   */
   plugins: [
     {src : '~/plugins/vuex.js'},
-    {src : '~/plugins/markdown.js', mode: 'client'},
+    {src : '~/plugins/vueFuse.js'},
+    {src : '~/plugins/markdown-editor.js', mode: 'client'},
+    //{ src: '~/plugins/vssue.js', mode: 'client' }
+
   ],
   /*
   ** Nuxt.js dev-modules
@@ -78,9 +81,6 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    /*
-    ** You can extend webpack config here
-    */
     extend(config, ctx) {
 
       // add frontmatter-markdown-loader
@@ -91,7 +91,11 @@ module.exports = {
           loader: "frontmatter-markdown-loader",
         }
       );
-    }
+    },
+    // Vssue provides ES6 module, so we need to add it to the transpile build option
+    // transpile: [
+    //   '(@vssue|vssue)\/((?!\/node_modules\/).)*\.js$',
+    //   ],
   },
   generate: {
     routes: dynamicRoutes

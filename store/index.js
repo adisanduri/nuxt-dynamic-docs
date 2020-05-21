@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-Vue.use(Vuex)
+//Vue.use(Vuex)
 
  const state = () => ({
     selectedTab: undefined,
@@ -73,7 +73,7 @@ Vue.use(Vuex)
                             {
                                 id: "2.1.1",
                                 title: "installs",
-                                route: "/horizon/simulator/installs",
+                                    route: "/horizon/simulator/installs",
                             },
                             {
                                 id: "2.1.2",
